@@ -25,17 +25,13 @@ func (s *Stack[T]) push(element T){
 }
 
 // Remove top element
-// if stack is empty then return T, false
-// else return top element , true
-func (s *Stack[T]) pop() (T, bool) {
+func (s *Stack[T]) pop() (bool) {
 	length := len(s.stack)
 	if length == 0 {
-		var empty T
-		return empty, false
+		return false
 	}
-	last_element := s.stack[length - 1]
 	s.stack = s.stack[:length - 1]
-	return last_element, true
+	return true
 }
 
 // Returns top element without removing it
@@ -59,6 +55,52 @@ func (s *Stack[T]) clear() {
 	s.stack = nil
 }
 
+// Find strictly smaller value of arr[i] in left
+// Returns the index
+// -1 means no smaller value
+func prev_smaller(arr []int) []int {
+	n := len(arr)
+	var st Stack[int]
+	st.push(-1)
+	index := make([]int, 0, n)
+	for i := 0; i < n; i++ {
+		for {
+			peek, ok := st.peek()
+			if !ok || peek == - 1 || arr[i] > arr[peek] {
+				break
+			}
+			st.pop()
+		}
+		peek, _ := st.peek()
+		index = append(index, peek)
+		st.push(i)
+	}
+	return index
+}
+
+// Find strictly greater value of arr[i] in left
+// Returns the index
+// -1 means no greater value
+func prev_greater(arr []int) []int {
+	n := len(arr)
+	var st Stack[int]
+	st.push(-1)
+	index := make([]int, 0, n)
+	for i := 0; i < n; i++ {
+		for {
+			peek, ok := st.peek()
+			if !ok || peek == - 1 || arr[i] < arr[peek] {
+				break
+			}
+			st.pop()
+		}
+		peek, _ := st.peek()
+		index = append(index, peek)
+		st.push(i)
+	}
+	return index
+}
+
 func main() {
 	
 	var st Stack[int]
@@ -79,4 +121,8 @@ func main() {
 	fmt.Println(st.size())
 	st.clear()
 	fmt.Println(st.empty())
+
+
+	fmt.Println(prev_smaller([]int{1, 2, 5, 4, 3, 1}))
+	fmt.Println(prev_greater([]int{1, 2, 5, 4, 3, 1}))
 }
