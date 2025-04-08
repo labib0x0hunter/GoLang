@@ -38,7 +38,7 @@ func (s *Stack[T]) pop() (T, bool) {
 	return last_element, true
 }
 
-// Returns top element
+// Returns top element without removing it
 func (s *Stack[T]) peek() (T, bool) {
 	length := len(s.stack)
 	if length == 0 {
